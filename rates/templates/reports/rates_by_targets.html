@@ -1,0 +1,100 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div id="content-main">
+    <h1>{% trans "Analyse rates by targets" %}</h1>
+    <form id="rates-by-targets" method="post">
+      <div>
+        <fieldset class="module aligned ()">
+	    <div class="form-row">
+	      {% if form.target_operator.errors %}
+	      <ul class="errorlist">{{ form.target_operator.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.target_operator.label }}</label>{{ form.target_operator }}
+	      {% if form.target_operator.help_text %}
+	      <ul class="messagelist">{{ form.target_operator.help_text }}</ul>
+	      {% endif %}
+            </div>
+            <div class="form-row">
+	      {% if form.rate_operators.errors %}
+	      <ul class="errorlist">{{ form.rate_operators.errors }}</ul>
+	      {% endif %}
+              <label>{{ form.rate_operators.label }}</label>{{ form.rate_operators }}
+	      {% if form.rate_operators.help_text %}
+	      <ul class="messagelist">{{ form.rate_operators.help_text }}</ul>
+	      {% endif %}
+            </div>
+            <div class="form-row">
+	      {% if form.rate_quality.errors %}
+	      <ul class="errorlist">{{ form.rate_quality.errors }}</ul>
+	      {% endif %}
+              <label>{{ form.rate_quality.label }}</label>{{ form.rate_quality }}
+	      {% if form.rate_quality.help_text %}
+	      <ul class="messagelist">{{ form.rate_quality.help_text }}</ul>
+	      {% endif %}
+            </div>
+
+            <div class="form-row">
+	      {% if form.rate_on_date.errors %}
+	      <ul class="errorlist">{{ form.rate_on_date.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.rate_on_date.label }}</label>{{ form.rate_on_date }}
+	      {% if form.rate_on_date.help_text %}
+	      <ul class="messagelist">{{ form.rate_on_date.help_text }}</ul>
+	      {% endif %}
+            </div>
+	    <!--
+	   <div class="form-row">
+	    {% if form.code.errors %}
+	    <ul class="errorlist">{{ form.code.errors }}</ul>
+	    {% endif %}
+             {{ form.code.label }}{{ form.code }}
+	   </div>
+           -->
+	    <div class="form-row">
+	      {% if form.code_manual.errors %}
+	      <ul class="errorlist">{{ form.code_manual.errors }}</ul>
+	      {% endif %}
+              <label>{{ form.code_manual.label }}</label>{{ form.code_manual }}
+	      {% if form.code_manual.help_text %}
+	      <ul class="messagelist">{{ form.code_manual.help_text }}</ul>
+	      {% endif %}
+            </div>
+            <div class="form-row">
+	      {% if form.code_country.errors %}
+	      <ul class="errorlist">{{ form.code_country.errors }}</ul>
+	      {% endif %}
+              <label>{{ form.code_country.label }}</label>{{ form.code_country }}
+	      {% if form.code_country.help_text %}
+	      <ul class="messagelist">{{ form.code_country.help_text }}</ul>
+	      {% endif %}
+            </div>
+	    <div class="form-row">
+	      {% if form.code_exact.errors %}
+	      <ul class="errorlist">{{ form.code_exact.errors }}</ul>
+	      {% endif %}
+              <label>{{ form.code_exact.label }}</label>{{ form.code_exact }}
+	      {% if form.code_exact.help_text %}
+	      <ul class="messagelist">{{ form.code_exact.help_text }}</ul>
+	      {% endif %}
+            </div>
+	    <div class="form-row">
+	      {% if form.price_markup.errors %}
+	      <ul class="errorlist">{{ form.price_markup.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.price_markup.label }}</label>{{ form.price_markup }}
+	      {% if form.price_markup.help_text %}
+	      <ul class="messagelist">{{ form.price_markup.help_text }}</ul>
+	      {% endif %}
+            </div>
+        </fieldset>
+	    <div class="submit-row">
+              <input class="default" type="submit" value="{% trans "Start analysis" %}"/>
+              <input type="submit" name="output_csv" value="{% trans "Start analysis and save as CSV" %}"/>
+            </div>
+    </div>
+    </form>
+  </div>
+{% endblock %}
+

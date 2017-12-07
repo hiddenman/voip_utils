@@ -1,0 +1,89 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %} 
+
+{% block content %}
+  <div id="content-main">
+    <h1>{% trans "Convert rates file" %}</h1>
+    <p>
+      {% trans "Converter will do the following operations:" %}
+      <ul>
+        <li>{% trans "Remove spaces, tabs and other whitespaces" %}</li>
+        <li>{% trans "Remove english X and russian H from ranges" %}</li>
+        <li>{% trans "Remove empty values and redundant commas" %}</li>
+        <li>{% trans "Replace commas in price or volume fields with dot" %}</li>
+        <li>{% trans "Remove $ in prices" %}</li>  
+        <li>{% trans "If price can't be coverted to decimal change it to zero" %}</li>  
+        <li>{% trans "Transliterate russian area names" %}</li>
+        <li>{% trans "Expand ranges like N-M (including ranges with leading zeros)" %}</li>
+        <li>{% trans "For any kind of code arrays generate one code per raw" %}</li>
+        <li>{% trans "Check for non-empty fields, code and price to be ciphers" %}</li>
+        <li>{% trans "Remove any non-alphabet symbols from area name" %}</li>
+        <li>{% trans "Check for duplicates" %}</li>
+        <li>{% trans "Replace PSTN and proper with Fixed, cellular with Mobile" %}</li>
+        <li>{% trans "Make area name lowercased with each word's first letter capitalized" %}</li>
+        <li>{% trans "Reduce ranges like 79000-79999 to 79" %}</li>
+        <li>{% trans "Compact codes like 790,791..799 to 79 in output file" %}</li>
+        </ul>
+    </p>
+    <form id="converter" method="post" enctype="multipart/form-data">
+      <div>
+        <fieldset class="module aligned ()">
+	    <div class="form-row">
+	      {% if form.rate_file.errors %}
+	      <ul class="errorlist">{{ form.rate_file.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.rate_file.label }}</label>{{ form.rate_file }}
+	      {% if form.rate_file.help_text %}
+	      <ul class="messagelist">{{ form.rate_file.help_text }}</ul>
+	      {% endif %}
+            </div>
+	    <div class="form-row">
+	      {% if form.fields_order.errors %}
+	      <ul class="errorlist">{{ form.fields_order.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.fields_order.label }}</label>{{ form.fields_order }}
+	      {% if form.fields_order.help_text %}
+	      <ul class="messagelist">{{ form.fields_order.help_text }}</ul>
+	      {% endif %}
+
+            </div>
+	    <div class="form-row">
+	      {% if form.do_translit.errors %}
+	      <ul class="errorlist">{{ form.do_translit.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.do_translit.label }}</label>{{ form.do_translit }}
+	      {% if form.do_translit.help_text %}
+	      <ul class="messagelist">{{ form.do_translit.help_text }}</ul>
+	      {% endif %}
+
+            </div>
+	    <div class="form-row">
+	      {% if form.do_reduce_ranges.errors %}
+	      <ul class="errorlist">{{ form.do_reduce_ranges.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.do_reduce_ranges.label }}</label>{{ form.do_reduce_ranges }}
+	      {% if form.do_reduce_ranges.help_text %}
+	      <ul class="messagelist">{{ form.do_reduce_ranges.help_text }}</ul>
+	      {% endif %}
+
+            </div>
+	    <div class="form-row">
+	      {% if form.do_compact_codes.errors %}
+	      <ul class="errorlist">{{ form.do_compact_codes.errors }}</ul>
+	      {% endif %}
+              <label class="required">{{ form.do_compact_codes.label }}</label>{{ form.do_compact_codes }}
+	      {% if form.do_compact_codes.help_text %}
+	      <ul class="messagelist">{{ form.do_compact_codes.help_text }}</ul>
+	      {% endif %}
+
+            </div>
+
+        </fieldset>
+	    <div class="submit-row">
+              <input type="submit" name="output_csv" value="{% trans "Convert and save as CSV" %}"/>
+            </div>
+    </div>
+    </form>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,8 @@
+{% extends "reports/rates_by_targets.html" %}
+{% load i18n %} 
+{% block sidebar %}
+<div id="content-main">
+  <h1>{% trans "Rates by targets for operator" %} {{ target_operator.operator_name }}</h1>
+  {% trans "There are no such targets." %}
+</div>
+{% endblock %}

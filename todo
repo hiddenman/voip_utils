@@ -1,0 +1,105 @@
+сейчас при загрузке таргетов и тарифов можно не указать файл и будут проблемы
+
+
+сделать в конвертере вывод ошибок нормальный
+
+сделать функцию  - запустить и отправить на email
+
+сделать конвертацию валюты
+
+исключать из анализа тарифы того, чьи таргеты смотрим
+
+сделать ту же подсказку для таргетов про даты и т.п.
+
+
+сделать опцию выбора качества маршрутов при анализе
+
+опции - заменить все тарифы/таргеты или добавить/изменить
+
+
+Once is_valid() returns True, you can process the form submission
+safe in the knowledge that it conforms to the validation rules defined
+by your form. While you could access request.POST directly at this point, it is better to access form.cleaned_data.
+
+
+что мы все-таки делаем с датами действия и т.п?
+
+
+опции анализатора:
+    учитывать качество или нет?
+
+
+сделать выбор качества
+
+сделать опции конвертера:
+    транслитерировать или нет
+    что еще?
+
+не работает поиск по 9377, только 93 77
+
+
+db_index добавить везде!!!
+
+
+добавить поддержку удаления \xa0
+
+переделать обработку строк на unicode
+
+
+заменять cell только отдельное, не в составе других  \b
+
+делать паддинг на четыре знака после .
+
+done заменять цену 0 на blocked
+
+
+Если мы имеем в прайсе:
+38096    Ukraine Mobile Kievstar     0.0820
+38097    Ukraine Mobile Kievstar     0.0820
+38098    Ukraine Mobile Kievstar     0.0850
+38067    Ukraine Mobile Kievstar     0.0850
+
+то выглядеть это должно:
+38096    Ukraine Mobile Kievstar     0.0820
+38097    Ukraine Mobile Kievstar     0.0820
+38098    Ukraine Mobile Kievstar А   0.0850
+38067    Ukraine Mobile Kievstar А   0.0850
+
+
+done много пробелов получается
+
+
+нет name,price,code и code,price,net
+
+
+done если есть дубли - ругаться, вдруг цена разная
+
+done заменять pstn и proper на fixed, cellular на mobile
+
+
+done сделать, чтобы 02-09 корректно раскрывались, то бишь, ноль не пропадал
+
+
+сделать то, что просил Антон с одинаковыми названиями
+
+done сделать, чтобы исправлял названия направлений как писала Лена, РЕната
+
+
+
+target:  priority
+	 split by volume
+	 work time
+	 channels
+rate:	quality (low,normal,premium)
+	split by volume
+	work time
+	channels
+        start time (when checking for existence, if time differs  and other is the same,
+                    change time, otherwise create new)  shoud we use separated tabled for dates?
+        end time
+        status (opened, closed, ...)
+        
+        
+при сохранении rate или target оператора, когда была выбрана area из списка, пересохранять её под этим оператором
+
+получается, что код направления не может быть пустым. низзя так

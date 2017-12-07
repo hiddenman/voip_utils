@@ -1,0 +1,559 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-31 02:10+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: rates/models.py:15
+msgid "Currency code"
+msgstr "Код валюты"
+
+#: rates/models.py:15
+msgid "Example: USD for US dollars"
+msgstr "Например: USD для долларов США"
+
+#: rates/models.py:16
+msgid "Currency name"
+msgstr "Название валюты"
+
+#: rates/models.py:22
+msgid "currencies"
+msgstr "валюты"
+
+#: rates/models.py:26
+msgid "Country code"
+msgstr "Код страны"
+
+#: rates/models.py:27
+msgid "Country name"
+msgstr "Название страны"
+
+#: rates/models.py:28 rates/models.py:147 rates/models.py:308
+msgid "File to load from"
+msgstr "Загрузить из файла"
+
+#: rates/models.py:28
+msgid ""
+"Load countries from file. Data format must be: Country code;Country name"
+msgstr ""
+"Загрузить из файла. Формат данных должен быть:  Код страны;Название страны"
+
+#: rates/models.py:67
+msgid "countries"
+msgstr "страны"
+
+#: rates/models.py:71
+msgid "Operator name"
+msgstr "Название оператора"
+
+#: rates/models.py:78
+msgid "operators"
+msgstr "операторы"
+
+#: rates/models.py:85
+msgid "Area country"
+msgstr "Страна направления"
+
+#: rates/models.py:87 rates/forms/reports.py:36
+msgid "Area code"
+msgstr "Код направления"
+
+#: rates/models.py:88
+msgid "Area name"
+msgstr "Название направления"
+
+#: rates/models.py:115
+msgid "areas"
+msgstr "направления"
+
+#: rates/models.py:129 rates/templates/reports/rates_by_targets_list.html:18
+msgid "Rate operator"
+msgstr "Оператор тарифа"
+
+#: rates/models.py:133 rates/templates/reports/rates_by_targets_list.html:11
+msgid "Rate area code"
+msgstr "Код направления тарифа"
+
+#: rates/models.py:135
+msgid "Rate area name"
+msgstr "Название направления тарифа"
+
+#: rates/models.py:138
+msgid "Rate area price"
+msgstr "Цена направления тарифа"
+
+#: rates/models.py:139
+msgid "Rate currency"
+msgstr "Валюта тарифа"
+
+#: rates/models.py:141
+msgid "Rate area quality"
+msgstr "Качество направления тарифа"
+
+#: rates/models.py:141
+msgid "Leave empty to use Normal or Unknown"
+msgstr "Не выбирайте ничего для использования качества Normal or Unknown"
+
+#: rates/models.py:142
+msgid "Rate start date"
+msgstr "Старт-дата тарифа"
+
+#: rates/models.py:143
+msgid ""
+"Leave empty to use current date. Existing rates with the same codes but "
+"different prices will be closed with yesterday end date. Existing rates name "
+"with the same codes and same prices will be changed to the new names. "
+"Existing rates with the same codes, same prices and same names will not be "
+"changed."
+msgstr ""
+"Не заполняйте поле для использования сегодняшней даты. Существующие тарифы с "
+"теми же кодами, но отличающимися ценами будут закрыты со вчерашней стоп-"
+"датой. Существующие названия направлений тарифов с теми же кодами и теми же "
+"ценами будут изменены на новые названия. Существующие тарифы с теми же "
+"кодами, ценами и названиями не будут изменены."
+
+#: rates/models.py:144
+msgid "Rate end date"
+msgstr "Стоп-дата тарифа"
+
+#: rates/models.py:144
+msgid "Leave empty to use 31/12/9999"
+msgstr "Не заполняйте поле для использования даты 31/12/9999"
+
+#: rates/models.py:145
+msgid ""
+"Load from file. Data format must be: Area codes in any format;Area name;Area "
+"price"
+msgstr ""
+"Загрузить из файла. Формат данных должен быть:  Коды направления в любом "
+"формате;Название направления;Цена направления"
+
+#: rates/models.py:148
+msgid ""
+"Remove all rates of this operator before loading. WARNING:  Only rates with "
+"selected quality will be deleted!"
+msgstr ""
+"Удалить все тарифы этого оператора перед загрузкой. ВНИМАНИЕ: Будут удалены "
+"тарифы только с выбранным качеством направлений!"
+
+#: rates/models.py:185
+msgid "End date must be greater then start date"
+msgstr "Стоп-дата должна быть больше старт-даты"
+
+#: rates/models.py:276
+msgid "rates"
+msgstr "тарифы"
+
+#: rates/models.py:290
+msgid "Rate code"
+msgstr "Код направления тарифа"
+
+#: rates/models.py:294
+msgid "Target operator"
+msgstr "Оператор таргета"
+
+#: rates/models.py:298 rates/templates/reports/rates_by_targets_list.html:12
+msgid "Target area code"
+msgstr "Код направления таргета"
+
+#: rates/models.py:300 rates/templates/reports/rates_by_targets_list.html:13
+msgid "Target area name"
+msgstr "Наименование кода направления таргета"
+
+#: rates/models.py:303 rates/templates/reports/rates_by_targets_list.html:15
+msgid "Target price"
+msgstr "Цена таргета"
+
+#: rates/models.py:304
+msgid "Target currency"
+msgstr "Валюта таргета"
+
+#: rates/models.py:305 rates/templates/reports/rates_by_targets_list.html:14
+msgid "Target volume"
+msgstr "Объём таргета"
+
+#: rates/models.py:305
+msgid "Leave empty if unknown"
+msgstr "Не заполняйте поле если неизвестно"
+
+#: rates/models.py:306
+msgid ""
+"Load from file. Data format must be: Target codes in any format;Target name;"
+"Target volume;Target price"
+msgstr ""
+"Загрузть из файла. Формат данных должен быть: Коды направления таргета в "
+"любом формате;Название направления таргета;Объем таргета;Цена направления "
+"таргета"
+
+#: rates/models.py:309
+msgid "Remove all targets of this operator before loading"
+msgstr "Удалить все таргеты этого оператора перед загрузкой"
+
+#: rates/models.py:404
+msgid "targets"
+msgstr "таргеты"
+
+#: rates/models.py:419
+msgid "Target code"
+msgstr "Код направления таргета"
+
+#: rates/forms/reports.py:14
+msgid "Analyse targets of operator"
+msgstr "Анализировать таргеты оператора"
+
+#: rates/forms/reports.py:15
+msgid "Select operator to analyse its targets"
+msgstr "Выберите оператора для анализа его таргетов"
+
+#: rates/forms/reports.py:17
+msgid "Use rates of operator"
+msgstr "Использовать тарифы оператора"
+
+#: rates/forms/reports.py:18
+msgid "You can select multiple operators or choose no one to use all of them"
+msgstr ""
+"Вы можете выбрать несколько операторов или не выбирать ни одного для поиска "
+"по всем"
+
+#: rates/forms/reports.py:21
+msgid "Choose rate quality to search for"
+msgstr "Выберите качество направлений тарифов для поиска"
+
+#: rates/forms/reports.py:22
+msgid "Do not choose anything to use all rate types"
+msgstr "Не выбирайте ничего для поиска по направлениям тарифов любого качества"
+
+#: rates/forms/reports.py:24
+msgid "Rate on date"
+msgstr "Действие тарифа на дату"
+
+#: rates/forms/reports.py:25
+msgid "Use rate which works on this date"
+msgstr "Использовать тарифы, которые действовали на эту дату"
+
+#: rates/forms/reports.py:33
+msgid "Choose country"
+msgstr "Выберите страну"
+
+#: rates/forms/reports.py:34
+msgid "Or choose country"
+msgstr "или выбрать страну"
+
+#: rates/forms/reports.py:37
+msgid "You can enter code or subcode (use % and _ as mask symbols)"
+msgstr ""
+"Вы можете ввести код или подкод (используйте % и _ как символы шаблона)"
+
+#: rates/forms/reports.py:39
+msgid "Exact area code"
+msgstr "Точное совпадение кода"
+
+#: rates/forms/reports.py:40
+msgid "Display only matched codes"
+msgstr "Отображать только совпадающие коды"
+
+#: rates/forms/reports.py:44
+msgid "Percent of the price as markup"
+msgstr "Процент от цены тарифа как накрутка"
+
+#: rates/forms/reports.py:45
+msgid ""
+"Add this percent of the original price to the final price and compare them. "
+"You can use negative values"
+msgstr ""
+"Добавить этот процент от цены тарифа к конечной цене и использовать в "
+"поиске. Вы можете использовать отрицательные значения"
+
+# manual
+#: rates/forms/utilities.py:10 rates/views/admin.py:10
+msgid "default (code;name;price)"
+msgstr "по умолчанию (код;наименование;цена)"
+
+#: rates/forms/utilities.py:13
+msgid "File with rates"
+msgstr "Файл с тарифами"
+
+#: rates/forms/utilities.py:13
+msgid "Select file with rates to convert"
+msgstr "Выберите файл с тарифами для конвертации"
+
+#: rates/forms/utilities.py:15
+msgid "Fields order"
+msgstr "Порядок полей в файле"
+
+#: rates/forms/utilities.py:16
+msgid "Select fields order in the file"
+msgstr "Выберите порядок полей в файле или оставьте 'по умолчанию'"
+
+#: rates/forms/utilities.py:17
+msgid "Transliterate destination names"
+msgstr "Транслитерировать названия направлений"
+
+#: rates/forms/utilities.py:17
+msgid "Check if you want to transliterate destination names"
+msgstr "Включите, если вы хотите транслитерировать все названия направлений"
+
+#: rates/forms/utilities.py:18
+msgid "Reduce ranges"
+msgstr "Сокращать диапазоны кодов"
+
+#: rates/forms/utilities.py:18
+msgid "Check if you want to reduce ranges like 79000-79999 to 79"
+msgstr ""
+"Включите, если вы хотите сокращать диапазоны кодов вида 79000-79999 до 79"
+
+#: rates/forms/utilities.py:19
+msgid "Compact codes"
+msgstr "Сжать коды"
+
+#: rates/forms/utilities.py:19
+msgid "Check if you want to compact output codes like 790,791..799 to 79"
+msgstr ""
+"Включите, если вы хотите сжать коды вида 790,791..799 до 79 в конечном файле"
+
+#: rates/templates/admin/index.html:18
+#, python-format
+msgid "Models available in the %(name)s application."
+msgstr ""
+
+#: rates/templates/admin/index.html:19
+#, python-format
+msgid "%(name)s"
+msgstr ""
+
+#: rates/templates/admin/index.html:29
+msgid "Add"
+msgstr ""
+
+#: rates/templates/admin/index.html:35
+msgid "Change"
+msgstr ""
+
+#: rates/templates/admin/index.html:45
+msgid "You don't have permission to edit anything."
+msgstr ""
+
+#: rates/templates/admin/index.html:49
+msgid "View data"
+msgstr ""
+
+#: rates/templates/admin/index.html:51
+msgid "View operators, countries, areas, rates, targets, currencies"
+msgstr "Просмотр операторов, стран, направлений, тарифов, таргетов, валют"
+
+#: rates/templates/admin/index.html:59
+msgid "Reports"
+msgstr "Отчёты"
+
+#: rates/templates/admin/index.html:61
+#: rates/templates/reports/rates_by_targets.html:6
+msgid "Analyse rates by targets"
+msgstr "Анализ тарифов на основе таргетов"
+
+#: rates/templates/admin/index.html:69
+msgid "Utilities"
+msgstr "Инструменты"
+
+#: rates/templates/admin/index.html:71
+msgid "Convert rates"
+msgstr "Конвертер тарифов"
+
+#: rates/templates/admin/index.html:83
+msgid "Recent Actions"
+msgstr ""
+
+#: rates/templates/admin/index.html:84
+msgid "My Actions"
+msgstr ""
+
+#: rates/templates/admin/index.html:88
+msgid "None available"
+msgstr ""
+
+#: rates/templates/admin/index.html:102
+msgid "Unknown content"
+msgstr ""
+
+#: rates/templates/reports/no_such_target.html:5
+#: rates/templates/reports/rates_by_targets_list.html:5
+msgid "Rates by targets for operator"
+msgstr "Тарифы по таргетам для оператора"
+
+#: rates/templates/reports/no_such_target.html:6
+msgid "There are no such targets."
+msgstr "Нет таких таргетов у оператора."
+
+#: rates/templates/reports/rates_by_targets.html:93
+msgid "Start analysis"
+msgstr "Запустить анализ"
+
+#: rates/templates/reports/rates_by_targets.html:94
+msgid "Start analysis and save as CSV"
+msgstr "Запустить анализ и сохранить в файл"
+
+#: rates/templates/reports/rates_by_targets_list.html:10
+msgid "Country"
+msgstr "Страна"
+
+#: rates/templates/reports/rates_by_targets_list.html:16
+msgid "Rate price"
+msgstr "Цена тарифа"
+
+#: rates/templates/reports/rates_by_targets_list.html:17
+msgid "Our increased price"
+msgstr "Наша цена с накруткой"
+
+#: rates/templates/reports/rates_by_targets_list.html:19
+msgid "Rate quality"
+msgstr "Качество направления тарифа"
+
+#: rates/templates/reports/rates_by_targets_list.html:40
+msgid "There are no rates for such targets."
+msgstr "Нет тарифов для данных таргетов."
+
+#: rates/templates/utilities/converter.html:6
+msgid "Convert rates file"
+msgstr "Конвертировать файл с тарифами"
+
+#: rates/templates/utilities/converter.html:8
+msgid "Converter will do the following operations:"
+msgstr "Конвертер произведет следующие операции:"
+
+#: rates/templates/utilities/converter.html:10
+msgid "Remove spaces, tabs and other whitespaces"
+msgstr "Удалит пробелы, табуляция и другие лишние символы"
+
+#: rates/templates/utilities/converter.html:11
+msgid "Remove english X and russian H from ranges"
+msgstr "Удалит английскую X и русскую Х из наборов кодов"
+
+#: rates/templates/utilities/converter.html:12
+msgid "Remove empty values and redundant commas"
+msgstr "Удалит пустые значения и лишние запятые"
+
+#: rates/templates/utilities/converter.html:13
+msgid "Replace commas in price or volume fields with dot"
+msgstr "Заменит запятые точкой в цене и объеме"
+
+#: rates/templates/utilities/converter.html:14
+msgid "Remove $ in prices"
+msgstr "Удалить $ в цене"
+
+#: rates/templates/utilities/converter.html:15
+msgid "If price can't be coverted to decimal change it to zero"
+msgstr "Если цену невозможно преобразовать в число, заменит её на ноль"
+
+#: rates/templates/utilities/converter.html:16
+msgid "Transliterate russian area names"
+msgstr "Транслитерирует русские наименования направлений"
+
+#: rates/templates/utilities/converter.html:17
+msgid "Expand ranges like N-M (including ranges with leading zeros)"
+msgstr "Раскроет наборы кодов виде N-M (включая наборы с нулем в начале)"
+
+#: rates/templates/utilities/converter.html:18
+msgid "For any kind of code arrays generate one code per raw"
+msgstr "Для любых массивов и наборов кодов сгенерирует один код на строку"
+
+#: rates/templates/utilities/converter.html:19
+msgid "Check for non-empty fields, code and price to be ciphers"
+msgstr "Произведет конечную проверку кодов и цены на наличие только цифр"
+
+#: rates/templates/utilities/converter.html:20
+msgid "Remove any non-alphabet symbols from area name"
+msgstr "Удалит все непечатные символы из названия направления"
+
+#: rates/templates/utilities/converter.html:21
+msgid "Check for duplicates"
+msgstr "Проверит наличие повторяющихся кодов"
+
+#: rates/templates/utilities/converter.html:22
+msgid "Replace PSTN and proper with Fixed, cellular with Mobile"
+msgstr "Заменит PSTN и proper на Fixed, cellular на Mobile"
+
+#: rates/templates/utilities/converter.html:23
+msgid "Make area name lowercased with each word's first letter capitalized"
+msgstr ""
+"Сделает все символы названия направления строчными, первые буквы отдельных "
+"слова прописными"
+
+#: rates/templates/utilities/converter.html:24
+msgid "Reduce ranges like 79000-79999 to 79"
+msgstr "Сократит диапазоны кодов вида 79000-79999 до 79"
+
+#: rates/templates/utilities/converter.html:25
+msgid "Compact codes like 790,791..799 to 79 in output file"
+msgstr ""
+"Сожмет коды вида 790,791..799 до 79 в конечном файле"
+
+#: rates/templates/utilities/converter.html:83
+msgid "Convert and save as CSV"
+msgstr "Конвертировать и сохранить в файл"
+
+#: rates/views/reports.py:108
+msgid "Country not found for code: "
+msgstr "Не найдена страна для кода: "
+
+#, fuzzy
+#~ msgid "Our price"
+#~ msgstr "Цена таргета"
+
+#~ msgid "rate"
+#~ msgstr "тариф"
+
+#~ msgid "Rates"
+#~ msgstr "тарифы"
+
+#~ msgid "Rate manager"
+#~ msgstr "Менеджер тарифов"
+
+#~ msgid "Rateman"
+#~ msgstr "Менеджер тарифов"
+
+#~ msgid "Expand ranges like N-M"
+#~ msgstr "Раскроет наборы кодов вида N-M в реальные коды"
+
+#~ msgid "Rates by targets"
+#~ msgstr "Анализ тарифов на основе таргетов"
+
+#~ msgid "Pricelist by target"
+#~ msgstr "Прайс-лист по таргету"
+
+#~ msgid "Generate price by targets"
+#~ msgstr "Сгенерировать прайс по таргетам"
+
+#~ msgid "Generate price"
+#~ msgstr "Сгенерировать прайс-лист"
+
+#~ msgid "Generate and save as CSV"
+#~ msgstr "Сгенерировать и сохранить в файл"
+
+#~ msgid "Price list by targets for operator"
+#~ msgstr "Прайс-лист по таргетам для оператора"
+
+#~ msgid "Generate price for"
+#~ msgstr "Сгенерировать прайс-лист для"
+
+#~ msgid "code;name;volume;price"
+#~ msgstr "код;наименование;объём;цена"
+
+#~ msgid "code;name;price"
+#~ msgstr "код;наименование;цена"
+
+#~ msgid "name;code;price"
+#~ msgstr "наименование;код;цена"
+
+#~ msgid "code;name"
+#~ msgstr "код;наименование"

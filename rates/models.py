@@ -1,0 +1,420 @@
+import datetime
+import exceptions
+from decimal import Decimal
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from voip_utils.utils import utils
+from voip_utils.rates.converters import basic
+
+# Create your models here.
+# FIXME: Add date and username, created this?
+# TODO: Add get_absolute_url. Doesn't work now
+# FIXME: Check all fields for commas, bad symbols and so on
+# TODO: Enable button 'Save as' (now it becames default, shouldn't)
+class Currency(models.Model):
+    currency_code = models.CharField(max_length=3, unique=True,verbose_name=_('Currency code'),help_text=_('Example: USD for US dollars'))
+    currency_name = models.CharField(max_length=30,verbose_name=_('Currency name'))
+
+    def __unicode__(self ):
+        return u'%s,%s' % (self.currency_code, self.currency_name )
+
+    class Meta:
+        verbose_name_plural = _('currencies')
+
+# TODO: Cut country name while loading
+class Country(models.Model):
+    country_code = models.SmallIntegerField(db_index=True, unique=True, blank=True,null=False,verbose_name=_('Country code'))
+    country_name = models.CharField(max_length=200, blank=True,db_index=True,verbose_name=_('Country name'))
+    country_file = models.FileField(upload_to='data/rates/countries/%Y/%m/%d', blank=True,verbose_name=_('File to load from'),help_text=_('Load countries from file. Data format must be: Country code;Country name'))
+
+    def __unicode__(self):
+        try:
+            return '%d %s' % (self.country_code, self.country_name)
+        except:
+            # FIXME: Should remove all this (needed for log)
+            return ''
+
+    def save(self, *args, **kwargs):
+        if (self.country_file == '') or (self.country_file is None):
+            super(Country, self).save(*args, **kwargs) # Call the "real" save() method.
+            # Create empty area as country
+            # FIXME: Should we check for errors?
+            # get_or_create returns tuple, so use first entry
+            area = Area.objects.get_or_create(area_country=self, area_code='', area_name='')[0]
+            return 
+        else:
+            # Load countries from file
+            countries = self.country_file.readlines()
+            countries_parsed = []
+            for country_iter in countries:
+                for (area_country,area_name) in basic.Country(country_iter):
+                    countries_parsed.append([area_country,area_name])
+
+            for (code,name) in countries_parsed:
+                if (code!=''):
+                    try:
+                        country = Country.objects.get(country_code=code)
+                    except Country.DoesNotExist:
+                        # FIXME: Exception
+                        Country.objects.create(country_code=code, country_name=name)
+                        continue
+                country.country_name = name
+                country.save()
+                
+                    
+    class Meta:
+        ordering = ['country_code', 'country_name']
+        verbose_name_plural = _('countries')
+        
+
+class Operator(models.Model):
+    operator_name = models.CharField(max_length=200, unique=True,db_index=True,verbose_name=_('Operator name'))
+    
+    def __unicode__(self):
+        return self.operator_name
+    
+    class Meta:
+        ordering = ['operator_name']
+        verbose_name_plural = _('operators')
+        
+    
+class Area(models.Model):
+    # FIXME: area can be empty, just the whole country
+    # TODO: Multiple codes support. How do we do this? Split to each code or use
+    # full string. But how to change it when there is new update? We shouldn't make dupes.
+    area_country = models.ForeignKey(Country,db_index=True,verbose_name=_('Area country'))
+    # FIXME: must use IntegerField, but my code is bad now
+    area_code = models.CharField(max_length=18, db_index=True, unique=False, null=False,verbose_name=_('Area code'))
+    area_name = models.CharField(max_length=200,db_index=True,verbose_name=_('Area name'))
+    
+    def save(self,  *args, **kwargs):
+        self.area_code = utils.cleanup_code(self.area_code)
+        super(Area, self).save(*args, **kwargs) # Call the "real" save() method.
+        
+    def __unicode__(self):
+        try:
+            if (len(self.area_country.country_name) > 15 ):
+                self.area_country.country_name = self.area_country.country_name[:15]+'...'
+            if (len(self.area_name) > 20 ):
+                self.area_name = self.area_name[:20]+'...'
+                
+            if (self.area_code==''):
+                return '%d %s %s %s'  % (self.area_country.country_code, self.area_code, 
+                                         self.area_country.country_name, self.area_name)
+                
+            else:
+                return '%d %s %s, %s'  % (self.area_country.country_code, self.area_code, 
+                                          self.area_country.country_name, self.area_name)
+        except:
+            # FIXME:
+            # Should remove all this (needed for log)            
+            return ''
+                
+    class Meta:
+        ordering = ['area_country', 'area_code', 'area_name']
+        verbose_name_plural = _('areas' )
+        
+ 
+# TODO:
+# Add code to areacode from file if it doesn't exist
+# How do we check for dupes, when string was splitted up (one code deleted - and what?)
+class Rate(models.Model):
+    # First value will be the default
+    QUALITY_CHOICES = (
+    ('N', 'Normal or Unknown'), 
+    ('P', 'Premium'), 
+    ('D', 'Direct')
+   )
+    rate_operator = models.ForeignKey(Operator,
+                                      verbose_name=_('Rate operator'),
+                                      related_name='rate',db_index=True)
+    # FIXME: temporarily disabled Area
+    rate_code = models.ForeignKey(Area,
+                                  blank=True, editable=False, null=True,db_index=True,verbose_name=_('Rate area code'))
+    rate_code_name = models.CharField(max_length=200,
+                                      blank=True,db_index=True, editable=False,verbose_name=_('Rate area name'))
+    rate_price = models.DecimalField(max_digits=8,
+                                     decimal_places=4,
+                                     blank=True,db_index=True, editable=False,verbose_name=_('Rate area price'))
+    rate_currency = models.ForeignKey(Currency,db_index=True,verbose_name=_('Rate currency'))
+    rate_quality = models.CharField(max_length=30, choices=QUALITY_CHOICES,
+                                    blank=True,db_index=True,verbose_name=_('Rate area quality'),help_text=_('Leave empty to use Normal or Unknown'))
+    rate_start_date = models.DateField(blank=True,db_index=True,verbose_name=_('Rate start date'),
+                                       help_text=_('Leave empty to use current date. Existing rates with the same codes but different prices will be closed with yesterday end date. Existing rates name with the same codes and same prices will be changed to the new names. Existing rates with the same codes, same prices and same names will not be changed.'))
+    rate_end_date = models.DateField(blank=True,db_index=True,verbose_name=_('Rate end date'),help_text=_('Leave empty to use 31/12/9999'))
+    rate_file = models.FileField(help_text=_('Load from file. Data format must be: Area codes in any format;Area name;Area price'),
+                                 upload_to='data/rates/rates/%Y/%m/%d',
+                                 blank=True,verbose_name=_('File to load from'))
+    is_replace = models.BooleanField(verbose_name=_('Remove all rates of this operator before loading. WARNING:  Only rates with selected quality will be deleted!'))
+
+    def __unicode__(self):
+        try:
+            return str('%s %s%s %s %.4f %s %s %s %s') % (self.rate_operator,
+                                                         self.rate_code.area_country, 
+                                                         self.rate_code.area_code,
+                                                         self.rate_code_name, 
+                                                         self.rate_price,
+                                                         self.rate_quality,
+                                                         self.rate_start_date, 
+                                                         self.rate_end_date,
+                                                         self.rate_currency)
+        except:
+            # FIXME:
+            # Should remove all this (needed for log)                        
+            return ''
+    
+    def save(self,  *args, **kwargs):
+
+        # FIXME
+        # How to check user input and what to do?
+        if ((self.rate_quality is None) or (self.rate_quality == '')):
+            self.rate_quality=self.QUALITY_CHOICES[0][0]
+            
+        if ((self.rate_start_date is None) or (self.rate_start_date == '')):
+            # FIXME:
+            # Use TZ
+            self.rate_start_date = datetime.datetime.now().date()
+                
+        if ((self.rate_end_date is None) or (self.rate_end_date == '')):
+            self.rate_end_date = datetime.datetime.max.date()
+            
+        if (self.rate_start_date > self.rate_end_date):
+            # FIXME:
+            # Autocorrect to now() ?
+            # Correct exception
+            raise exceptions.AssertionError(_('End date must be greater then start date'))
+
+        # Delete all rates of the operator before loading if specified
+        if (self.is_replace):
+            Rate.objects.filter(rate_operator=self.rate_operator,rate_quality=self.rate_quality).delete()
+
+        
+        if ((self.rate_file is None) or (self.rate_file == '')):
+            super(Rate, self).save(*args, **kwargs) # Call the "real" save() method.
+        else:
+            countries = Country.objects.all()
+            # Load targets from file
+            # FIXME: try
+            rates = self.rate_file.readlines()
+            rates_parsed = []
+            for rate_iter in rates:
+                for (area_country,area_code,area_name,area_price) in basic.Rate(rate_iter):
+                    rates_parsed.append([area_country+area_code,area_name,area_price])
+
+            for (code,name,price) in rates_parsed:
+                country = None
+                # FIXME: optimizations and so on
+                # FIXME: move to utils or class methods
+                for country_iter in countries:
+                    if (code.startswith(str(country_iter.country_code)) == 1):
+                        # Cut country from the fullcode
+                        country = country_iter
+                        # Areacode will be the rest
+                        if (code[len(str(country.country_code)):] != ''):
+                            code = code[len(str(country.country_code)):]
+                            break
+                        else:
+                            code = ''
+                            
+                if (country is None):
+                    # FIXME:
+                    # Raise right error + write warning
+                    raise Country.DoesNotExist(('Country not found for code: ' + str(code)))
+
+                # get_or_create returns tuple, so use first entry
+                area = Area.objects.get_or_create(area_country=country, area_code=code, 
+                                                       defaults={'area_name': name})[0]
+                # FIXME
+                # Try on get, not save. Use finally?
+                try:
+                    rate = Rate.objects.get(rate_operator=self.rate_operator,
+                                            rate_code=area,
+                                            rate_quality=self.rate_quality,
+                                            rate_start_date__lte=datetime.datetime.now().date(),
+                                            rate_end_date__gte=datetime.datetime.now().date())
+                    # FIXME: What do we do, when changed: price, name?
+                    if (Decimal(rate.rate_price) != Decimal(price)):
+                        # Should we do this? Close old and create new?
+                        # FIXME forever
+                        rate.rate_end_date = (datetime.datetime.now()-datetime.timedelta(days=1)).date()
+                        if (rate.rate_start_date>rate.rate_end_date):
+                            rate.rate_start_date=rate.rate_end_date
+                        rate.save()
+                        Rate.objects.create(rate_operator=self.rate_operator,
+                                             rate_code=area,
+                                             rate_code_name=name,
+                                             rate_price=price,
+                                             rate_currency=self.rate_currency,
+                                             rate_quality=self.rate_quality,
+                                             rate_start_date=self.rate_start_date,
+                                             rate_end_date=self.rate_end_date)
+                    elif ((rate.rate_code.area_name != name) and (rate.rate_code_name != name)):
+                        rate.rate_code_name = name
+                        rate.save()
+                    elif ((rate.rate_code.area_name == name) and (rate.rate_code_name != '')):
+                        rate.rate_code_name = ''
+                        rate.save()
+                    
+                except Rate.DoesNotExist:
+                    # FIXME:
+                    # Check country and so on, create if none, exceptions?
+                    if (area.area_name != name):
+                        rate_code_name = name
+                    else:
+                        rate_code_name = ''
+                    Rate.objects.create(rate_operator=self.rate_operator,
+                                         rate_code=area,
+                                         rate_code_name=name,
+                                         rate_price=price,
+                                         rate_currency=self.rate_currency,
+                                         rate_quality=self.rate_quality,
+                                         rate_start_date=self.rate_start_date,
+                                         rate_end_date=self.rate_end_date)
+
+    class Meta:
+        ordering = ['rate_operator', 'rate_code']
+        verbose_name_plural = _('rates' )
+        
+        
+    def display_rate_code(self):
+        if ((self.rate_code_name is None) or (self.rate_code_name == '')):
+            self.rate_code_name = self.rate_code.area_name
+        if (self.rate_code.area_code == ''):
+            str_format = '%d %s %s %s'            
+        else:
+            str_format = '%d %s %s, %s'
+        return  str_format % (self.rate_code.area_country.country_code,
+                              self.rate_code.area_code, 
+                              self.rate_code.area_country.country_name,
+                              self.rate_code_name)
+    display_rate_code.short_description = _('Rate code')
+
+class Target(models.Model):
+    target_operator = models.ForeignKey(Operator,
+                                        verbose_name=_('Target operator'),                                        
+                                        related_name='target',db_index=True)
+    # FIXME: temporarily disabled Area
+    target_code = models.ForeignKey(Area,
+                                     blank=True, null=True,db_index=True, editable=False,verbose_name=_('Target area code'))
+    target_code_name = models.CharField(max_length=200,
+                                         blank=True,db_index=True, editable=False,verbose_name=_('Target area name'))
+    target_price = models.DecimalField(max_digits=8,
+                                        decimal_places=4,
+                                        blank=True,db_index=True, editable=False,verbose_name=_('Target price'))
+    target_currency = models.ForeignKey(Currency,db_index=True,verbose_name=_('Target currency'))
+    target_volume = models.IntegerField(blank=True,db_index=True, editable=False,verbose_name=_('Target volume'),help_text=_('Leave empty if unknown'))
+    target_file = models.FileField(help_text=_('Load from file. Data format must be: Target codes in any format;Target name;Target volume;Target price'),
+                                    upload_to='data/rates/targets/%Y/%m/%d',
+                                    blank=True,verbose_name=_('File to load from'))
+    is_replace = models.BooleanField(verbose_name=_('Remove all targets of this operator before loading'))
+    
+    def __unicode__(self):
+        try:
+            return str('%s %s%s %s %.4f %s %d') % (self.target_operator,
+                                                      self.target_code.area_country, 
+                                                      self.target_code.area_code,
+                                                      self.target_code_name, 
+                                                      self.target_price,
+                                                      self.target_currency,
+                                                      self.target_volume)
+        except:
+            # FIXME:
+            # Should remove all this (needed for log)            
+            return ''
+        
+    def save(self,  *args, **kwargs):
+        # Delete all targets of the operator before loading if specified
+        if (self.is_replace):
+            Target.objects.filter(target_operator=self.target_operator).delete()
+
+        if ((self.target_file is None) or (self.target_file == '')):
+            if (not self.target_volume):
+                self.target_volume = 0
+            super(Target, self).save(*args, **kwargs) # Call the "real" save() method.
+            return 
+        else:
+            countries = Country.objects.all()    
+            # Load targets from file
+            targets = self.target_file.readlines()
+            targets_parsed = []            
+            for target_iter in targets:
+                # FIXME:
+                # Add catches
+                # Process multiple codes correctly
+                for (area_country,area_code,area_name,area_volume,area_price) in basic.Target(target_iter):
+                    targets_parsed.append([area_country+area_code,area_name,area_volume,area_price])
+            for (code,name,volume,price) in targets_parsed:
+                country = None
+                # FIXME: optimizations and so on
+                # FIXME: move to utils or class methods
+                for country_iter in countries:
+                    if (code.startswith(str(country_iter.country_code)) == 1):
+                        # Cut country from the fullcode
+                        country = country_iter
+                        # Areacode will be the rest
+                        if (code[len(str(country.country_code)):] != ''):
+                            code = code[len(str(country.country_code)):]
+                            break
+                        else:
+                            code = ''                      
+                        
+                if (country is None):
+                    # FIXME:
+                    # Raise right error + write warning
+                    raise Country.DoesNotExist(('Country not found for code: ' + str(code)))
+                
+                # get_or_create returns tuple, so use first entry
+                area = Area.objects.get_or_create(area_country=country, area_code=code, 
+                                                  defaults={'area_name': name})[0]
+
+                # FIXME
+                # Try on get, not save. Use finally?                
+                try:
+                    target = Target.objects.get(target_operator=self.target_operator, target_code=area)
+                    is_modified = False
+                    if (Decimal(target.target_price) != Decimal(price)):
+                        target.target_price = price
+                        is_modified = True
+                    if (Decimal(target.target_volume) != Decimal(volume)):
+                        target.target_volume = volume
+                        is_modified = True
+                    if ((target.target_code.area_name != name) and (target.target_code_name != name)):
+                        target.target_code_name = name
+                        is_modified = True
+                    if ((target.target_code.area_name == name) and (target.target_code_name != '')):
+                        target.target_code_name = ''
+                        is_modified = True
+                        
+                    if (is_modified):
+                        target.save()
+                        
+                except Target.DoesNotExist:
+                    # FIXME:
+                    # Check country and so on, create if none
+                    if (area.area_name != name):
+                        target_code_name = name
+                    else:
+                        target_code_name = ''                    
+                    Target.objects.create(target_operator=self.target_operator, target_code=area,
+                                           target_code_name=name, target_price=price,
+                                           target_volume=volume, target_currency=self.target_currency)
+                    
+    class Meta:
+        ordering = ['target_operator', 'target_code']
+        verbose_name_plural = _('targets')
+        
+       
+    def display_target_code(self):
+        if ((self.target_code_name==None) or (self.target_code_name=='')):
+            self.target_code_name = self.target_code.area_name
+        if (self.target_code.area_code==''):
+            str_format = '%d %s %s %s'            
+        else:
+            str_format = '%d %s %s, %s'
+            
+        return str_format % (self.target_code.area_country.country_code,
+                              self.target_code.area_code, 
+                              self.target_code.area_country.country_name,
+                              self.target_code_name)
+    display_target_code.short_description = _('Target code')
+    

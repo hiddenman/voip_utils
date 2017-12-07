@@ -1,0 +1,44 @@
+{% extends "reports/rates_by_targets.html" %}
+{% load i18n %} 
+{% block sidebar %}
+<div id="content-main">
+  <h1>{% trans "Rates by targets for operator" %} {{ target_operator.operator_name }}</h1>
+  {% if rates_list %}
+  <table cellspacing="0">
+    <thead>
+      <tr>
+        <th class="sorted">{% trans "Country" %}</th>
+        <th class="sorted">{% trans "Rate area code" %}</th>
+        <th class="sorted">{% trans "Target area code" %}</th>
+	<th class="sorted">{% trans "Target area name" %}</th>
+	<th class="sorted">{% trans "Target volume" %}</th>
+	<th class="sorted">{% trans "Target price" %}</th>
+	<th class="sorted">{% trans "Rate price" %}</th>
+	<th class="sorted">{% trans "Our increased price" %}</th>
+	<th class="sorted">{% trans "Rate operator" %}</th>
+	<th class="sorted">{% trans "Rate quality" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rate in rates_list %}
+      <tr class="{% cycle row1,row2 %}">
+        <td>{{ rate.rate_code.area_country.country_code }}</td>
+        <td><a href="../../data/rates/rate/objects/{{ rate.rate.id }}/" target="_blank">{{ rate.rate_code.area_code }}</td>
+        <td><a href="../../data/rates/target/objects/{{ rate.target.id }}/" target="_blank">{{ rate.target_code.area_code }}</td>
+        <td><a href="../../data/rates/target/objects/{{ rate.target.id }}/" target="_blank">{{ rate.target_code.area_name }}</td>
+        <td><a href="../../data/rates/target/objects/{{ rate.target.id }}/" target="_blank">{{ rate.target_volume }}</td>
+        <td><a href="../../data/rates/target/objects/{{ rate.target.id }}/" target="_blank">{{ rate.target_price }}</td>
+        <td><a href="../../data/rates/rate/objects/{{ rate.rate.id }}/" target="_blank">{{ rate.rate_price }}</td>
+        <td>{{ rate.rate_price_increased }}</td>
+        <td><a href="../../data/rates/operator/objects/{{ rate.rate_operator.id }}/" target="_blank">{{ rate.rate_operator.operator_name }}</a></td>
+        <td><a href="../../data/rates/rate/objects/{{ rate.rate.id }}/" target="_blank">{{ rate.rate_quality }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  {% trans "There are no rates for such targets." %}
+  {% endif %}
+  
+</div>
+{% endblock %}
